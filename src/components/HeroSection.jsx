@@ -19,7 +19,7 @@ const HeroSection = () => {
           </p>
           <div className="flex flex-wrap gap-3 pt-2">
             <a
-              href="#studios"
+              href="#image-studio"
               className="inline-flex items-center gap-2 rounded-lg bg-indigo-500 hover:bg-indigo-600 active:bg-indigo-700 px-5 py-3 font-medium transition-colors"
             >
               <Rocket className="h-5 w-5" /> Get Started

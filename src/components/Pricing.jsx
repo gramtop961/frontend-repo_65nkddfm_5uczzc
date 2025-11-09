@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Check } from 'lucide-react';
+
+const API_BASE = import.meta.env.VITE_BACKEND_URL || (typeof window !== 'undefined' ? window.location.origin.replace('3000', '8000') : '');
 
 const tiers = [
   {
@@ -44,6 +46,28 @@ const tiers = [
 ];
 
 const Pricing = () => {
+  const [loadingPlan, setLoadingPlan] = useState('');
+  const [message, setMessage] = useState('');
+
+  const subscribe = async (plan) => {
+    setLoadingPlan(plan);
+    setMessage('');
+    try {
+      const res = await fetch(`${API_BASE}/api/subscribe`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ plan })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail || 'Failed to subscribe');
+      setMessage(data.message || 'Success');
+    } catch (e) {
+      setMessage(e.message);
+    } finally {
+      setLoadingPlan('');
+    }
+  };
+
   return (
     <section id="pricing" className="w-full bg-slate-950 text-white">
       <div className="mx-auto max-w-7xl px-6 py-20">
@@ -51,6 +75,11 @@ const Pricing = () => {
           <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Simple, scalable pricing</h2>
           <p className="mt-3 text-white/70">Only pay for what you need. Upgrade anytime as your content engine grows.</p>
         </div>
+        {message && (
+          <div className="mx-auto mb-6 max-w-xl rounded-lg border border-white/10 bg-emerald-500/10 p-3 text-center text-sm text-emerald-300">
+            {message}
+          </div>
+        )}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {tiers.map((t) => (
             <div
@@ -70,9 +99,9 @@ const Pricing = () => {
                   </li>
                 ))}
               </ul>
-              <a href="#" className="mt-8 inline-flex w-full items-center justify-center rounded-lg bg-indigo-500 hover:bg-indigo-600 active:bg-indigo-700 px-4 py-2 font-medium transition-colors">
-                Choose {t.name}
-              </a>
+              <button onClick={() => subscribe(t.name)} disabled={loadingPlan === t.name} className="mt-8 inline-flex w-full items-center justify-center rounded-lg bg-indigo-500 hover:bg-indigo-600 active:bg-indigo-700 px-4 py-2 font-medium transition-colors disabled:opacity-60">
+                {loadingPlan === t.name ? 'Processing...' : `Choose ${t.name}`}
+              </button>
             </div>
           ))}
         </div>

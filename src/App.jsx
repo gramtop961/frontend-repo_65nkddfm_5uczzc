@@ -1,6 +1,8 @@
 import React from 'react';
 import HeroSection from './components/HeroSection';
 import FeaturesGrid from './components/FeaturesGrid';
+import ImageStudio from './components/ImageStudio';
+import VideoStudio from './components/VideoStudio';
 import HowItWorks from './components/HowItWorks';
 import Pricing from './components/Pricing';
 
@@ -9,6 +11,8 @@ const App = () => {
     <div className="min-h-screen bg-slate-950">
       <HeroSection />
       <FeaturesGrid />
+      <ImageStudio />
+      <VideoStudio />
       <HowItWorks />
       <Pricing />
       <footer className="border-t border-white/10 bg-slate-950 text-white">
